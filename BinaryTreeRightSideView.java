@@ -1,36 +1,62 @@
-package leetcode.medium;
+package leetcode;
 
 import util.TreeNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
-public class BinaryTreeRightSideView {
+/**
+ * Created by nikoo28 on 7/20/19 3:11 PM
+ */
 
-  List<Integer> rightSideView(TreeNode root) {
+class BinaryTreeRightSIdeView {
 
-    List<Integer> result = new ArrayList<>();
-    if (root == null) return result;
+  private List<Integer> rightSideView(TreeNode root) {
+
+    if (root == null)
+      return new ArrayList<>();
 
     Queue<TreeNode> queue = new LinkedList<>();
-    queue.offer(root);
+    List<Integer> result = new ArrayList<>();
 
-    while (!queue.isEmpty()) {
-      int levelSize = queue.size();  // Number of nodes at the current level
-      int lastValue = 0;  // Store the last node's value of the level
+    queue.add(root);
+    queue.add(null);
+    while (queue.peek() != null) {
 
-      for (int i = 0; i < levelSize; i++) {
+      int size = queue.size();
+      TreeNode prev = null;
+      for (int q = 0; q < size; q++) {
+
         TreeNode node = queue.poll();
-        lastValue = node.val;  // Update lastValue with the current node
+        if (node == null) {
+          break;
+        }
+        if (node.left != null)
+          queue.add(node.left);
 
-        // Add child nodes to queue for next level processing
-        if (node.left != null) queue.offer(node.left);
-        if (node.right != null) queue.offer(node.right);
+        if (node.right != null)
+          queue.add(node.right);
+
+        prev = node;
       }
-
-      result.add(lastValue);  // Add the last node's value of this level
+      result.add(prev.val);
+      queue.add(null);
     }
-
     return result;
+  }
+
+  public static void main(String[] args) {
+
+    TreeNode root = new TreeNode(1);
+    root.left = new TreeNode(2);
+    root.right = new TreeNode(3);
+    root.left.right = new TreeNode(5);
+    root.right.right = new TreeNode(4);
+
+    BinaryTreeRightSIdeView binaryTreeRightSideView = new BinaryTreeRightSIdeView();
+    System.out.println(binaryTreeRightSideView.rightSideView(root));
   }
 
 }

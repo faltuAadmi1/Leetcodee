@@ -1,22 +1,15 @@
-package leetcode.easy;
+package leetcode;
 
-public class MaxConsecutiveOnes {
+/**
+ * @author nikoo28 on 9/16/17
+ */
+class MaxConsecutiveOnes {
 
-  int findMaxConsecutiveOnes(int[] nums) {
-    int max = 0;
-    int count = 0;
+  public int findMaxConsecutiveOnes(int[] nums) {
 
-    // Iterate through all the elements
-    // and keep a track of the maximum 1s
-    for (int num : nums) {
-      if (num == 1) {
-        count++;
-        max = Math.max(max, count);
-      } else {
-        count = 0;
-      }
-    }
-
+    int maxHere = 0, max = 0;
+    for (int n : nums)
+      max = Math.max(max, maxHere = n == 0 ? 0 : maxHere + 1);
     return max;
   }
 

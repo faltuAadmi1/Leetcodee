@@ -1,40 +1,43 @@
-package leetcode.medium;
+package leetcode;
 
 import java.util.Stack;
 
-public class MinStack {
+/**
+ * Created by nikoo28 on 7/19/19 2:36 AM
+ */
 
-  Stack<Integer> stack;
-  Stack<Integer> minStack;
+class MinStack {
 
-  public MinStack() {
-    stack = new Stack<>();
-    minStack = new Stack<>();
-  }
+  private Stack<Integer> mStack = new Stack<>();
+  private Stack<Integer> mMinStack = new Stack<>();
 
-  public void push(int val) {
-    stack.push(val);
-
-    // If minStack is empty or new value is less than equal to
-    // the top of the minStack, push it onto the minStack
-    if (minStack.isEmpty() || val <= minStack.peek())
-      minStack.push(val);
+  public void push(int x) {
+    mStack.push(x);
+    if (mMinStack.size() != 0) {
+      int min = mMinStack.peek();
+      if (x <= min) {
+        mMinStack.push(x);
+      }
+    } else {
+      mMinStack.push(x);
+    }
   }
 
   public void pop() {
-    int poppedValue = stack.pop();
-
-    // If popped value == top of the minStack,
-    // pop it from the minStack as well
-    if (poppedValue == minStack.peek())
-      minStack.pop();
+    int x = mStack.pop();
+    if (mMinStack.size() != 0) {
+      if (x == mMinStack.peek()) {
+        mMinStack.pop();
+      }
+    }
   }
 
   public int top() {
-    return stack.peek();
+    return mStack.peek();
   }
 
   public int getMin() {
-    return minStack.peek();
+    return mMinStack.peek();
   }
+
 }

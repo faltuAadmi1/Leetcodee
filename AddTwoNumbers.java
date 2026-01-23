@@ -1,41 +1,55 @@
-package leetcode.medium;
+package leetcode;
 
 import util.ListNode;
 
-import java.util.List;
+/**
+ * Created by nikoo28 on 7/5/19 12:29 AM
+ */
 
-public class AddTwoNumbers {
+class AddTwoNumbers {
 
-  ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+  public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    if (l1 == null)
+      return l2;
 
-    ListNode result = new ListNode(0);
-    ListNode ptr = result;
+    if (l2 == null)
+      return l1;
 
-    int carry = 0;    // Set default carry
+    ListNode l3 = null;
+    ListNode ans = null;
 
+    int carry = 0;
     while (l1 != null || l2 != null) {
 
-      int sum = 0 + carry;    // Initialize sum
+      int x, y;
+      x = l1 == null ? 0 : l1.val;
+      y = l2 == null ? 0 : l2.val;
 
-      if (l1 != null) {    // Use number from first list
-        sum += l1.val;
-        l1 = l1.next;
+      int val = x + y + carry;
+      carry = 0;
+
+      if (val >= 10) {
+        carry = 1;
+        val = val % 10;
       }
 
-      if (l2 != null) {    // Use number from 2nd list
-        sum += l2.val;
-        l2 = l2.next;
+      if (ans == null) {
+        l3 = new ListNode(val);
+        ans = l3;
+      } else {
+        l3.next = new ListNode(val);
+        l3 = l3.next;
       }
 
-      carry = sum / 10;    // Get sum and carry
-      sum = sum % 10;
-      ptr.next = new ListNode(sum);
-      ptr = ptr.next;
+      if (l1 != null) l1 = l1.next;
+      if (l2 != null) l2 = l2.next;
     }
 
-    if (carry == 1) ptr.next = new ListNode(1);
+    if (carry == 1) {
+      l3.next = new ListNode(1);
+    }
 
-    return result.next;
+    return ans;
   }
 
 }

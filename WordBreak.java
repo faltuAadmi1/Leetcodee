@@ -1,37 +1,36 @@
-package leetcode.medium;
+package leetcode;
 
 import java.util.*;
 
-public class WordBreak {
+/**
+ * Created by nikoo28 on 7/18/19 9:50 PM
+ */
 
-  boolean wordBreak(String s, List<String> wordDict) {
+class WordBreak {
 
-    // Convert the dictionary to a set for O(1) lookups
-    Set<String> wordSet = new HashSet<>(wordDict);
+  public boolean wordBreak(String s, List<String> wordDict) {
 
-    // Find the maximum word length in the dictionary
-    int maxLen = 0;
-    for (String word : wordDict) {
-      maxLen = Math.max(maxLen, word.length());
+    int[] visited = new int[s.length()];
+    Set<String> dictSet = new HashSet<>(wordDict);
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(0);
+    while (!queue.isEmpty()) {
+      Integer begin = queue.remove();
+      if (visited[begin] == 0) {
+        for (int i = begin + 1; i <= s.length(); i++) {
+
+          String substring = s.substring(begin, i);
+          if (dictSet.contains(substring)) {
+            queue.add(i);
+            if (i == s.length())
+              return true;
+          }
+        }
+        visited[begin] = 1;
+      }
     }
 
-    int n = s.length();
-    // dp[i] states if the substring s[0..i] can be segmented
-    boolean[] dp = new boolean[n + 1];
-
-    // Base case: empty string is valid
-    dp[0] = true;
-
-    for (int i = 1; i <= n; i++)
-
-      // Check prefixes of length up to maxLen
-      for (int j = i - 1; j >= Math.max(0, i - maxLen); j--)
-        if (dp[j] && wordSet.contains(s.substring(j, i))) {
-          dp[i] = true;
-          break; // No need to check further prefixes
-        }
-
-    return dp[n];
+    return false;
   }
 
 }

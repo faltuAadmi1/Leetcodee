@@ -1,40 +1,77 @@
-package leetcode.medium;
+package leetcode;
 
-import util.Node;
+import java.util.HashMap;
+import java.util.Map;
 
-public class CopyListWithRandomPointer {
+/**
+ * Created by nikoo28 on 7/16/19 2:15 AM
+ */
 
-  Node copyRandomList(Node head) {
-    if (head == null) return null;
+class Node {
+  public int val;
+  public Node next;
+  public Node random;
 
-    Node curr = head; // Create new list w/ same values
-    while (curr != null) {
-      Node newNode = new Node(curr.val);
-      newNode.next = curr.next;
-      curr.next = newNode;
-      curr = newNode.next;
-    }
-
-    curr = head; // Copy the random pointers
-    while (curr != null) {
-      if (curr.random != null)
-        curr.next.random = curr.random.next;
-      curr = curr.next.next;
-    }
-
-    curr = head; // Separate the two lists
-    Node newHead = head.next;
-    Node newCurr = newHead;
-    while (curr != null) {
-      curr.next = newCurr.next;
-      curr = curr.next;
-      if (curr != null) {
-        newCurr.next = curr.next;
-        newCurr = newCurr.next;
-      }
-    }
-
-    return newHead;
+  public Node() {
   }
 
+  public Node(int _val, Node _next, Node _random) {
+    val = _val;
+    next = _next;
+    random = _random;
+  }
+}
+
+class CopyListWithRandomPointer {
+
+  private Map<Node, Node> oldNodeNewNodeMap = new HashMap<>();
+
+  private Node copyRandomList(Node head) {
+
+    if (head == null)
+      return null;
+
+    Node headCopy = head;
+    while (head != null) {
+      Node temp = new Node();
+      oldNodeNewNodeMap.put(head, temp);
+
+      temp.val = head.val;
+      head = head.next;
+    }
+
+    head = headCopy;
+    Node deepCopy = oldNodeNewNodeMap.get(head);
+    Node deepCopyHead = deepCopy;
+    while (head != null) {
+      Node next = head.next;
+      Node random = head.random;
+
+      deepCopy.next = oldNodeNewNodeMap.get(next);
+      deepCopy.random = oldNodeNewNodeMap.get(random);
+
+      head = head.next;
+      deepCopy = deepCopy.next;
+    }
+
+    return deepCopyHead;
+  }
+
+  public static void main(String[] args) {
+    CopyListWithRandomPointer copyListWithRandomPointer = new CopyListWithRandomPointer();
+
+    Node id1 = new Node();
+    Node id2 = new Node();
+
+    id1.val = 1;
+    id2.val = 2;
+
+    id1.next = id2;
+    id1.random = id2;
+
+    id2.next = null;
+    id2.random = id2;
+
+    System.out.println(copyListWithRandomPointer.copyRandomList(id1));
+  }
 }
